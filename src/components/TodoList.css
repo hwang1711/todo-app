@@ -1,0 +1,11 @@
+.todo-list {
+  list-style: none;
+  padding: 8px 0;
+}
+
+.list-empty {
+  text-align: center;
+  color: #9ca3af;
+  padding: 24px 16px;
+  font-size: 0.9rem;
+}
