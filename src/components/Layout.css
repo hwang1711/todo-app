@@ -1,0 +1,14 @@
+.layout {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f0f2f5;
+}
+
+.layout-main {
+  flex: 1;
+  padding-bottom: 64px; /* BottomNav 높이 확보 */
+  overflow-y: auto;
+}
