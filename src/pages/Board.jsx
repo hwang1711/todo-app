@@ -28,11 +28,14 @@ function Board() {
 
   const moveStatus = async (taskId, newStatus) => {
     const updates = { status: newStatus }
-    // today/doing로 이동 시 scheduledDate가 없으면 오늘 날짜로 설정
-    if (newStatus === 'today' || newStatus === 'doing') {
+    // today/doing/done으로 이동 시 scheduledDate가 없으면 오늘 날짜로 설정
+    if (newStatus === 'today' || newStatus === 'doing' || newStatus === 'done') {
       const task = tasks.find((t) => t.id === taskId)
       if (!task?.scheduledDate) {
         updates.scheduledDate = dayjs().format('YYYY-MM-DD')
+      }
+      if (newStatus === 'done') {
+        updates.doneAt = Date.now()
       }
     }
     await updateTask(taskId, updates)
