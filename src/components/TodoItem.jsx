@@ -5,7 +5,7 @@ function TodoItem({ todo, onToggle, onDelete }) {
     <li className={`todo-item ${todo.done ? 'done' : ''}`}>
       <button
         className="todo-check"
-        onClick={() => onToggle(todo.id)}
+        onClick={() => onToggle(todo.id, todo.done)}
         aria-label={todo.done ? '완료 취소' : '완료'}
       >
         {todo.done ? '✅' : '⬜'}
