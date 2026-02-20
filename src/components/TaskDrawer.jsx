@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import dayjs from 'dayjs'
 import { useTodoStore } from '../store/todoStore'
 import { useTagStore } from '../store/tagStore'
 import './TaskDrawer.css'
@@ -29,10 +30,16 @@ function TaskDrawer({ task, onClose }) {
   const [notes, setNotes] = useState(task.notes ?? '')
   const [selectedTags, setSelectedTags] = useState(task.tags ?? [])
 
-  // 자동저장 (1초 debounce)
+  // 자동저장 (600ms debounce)
   useEffect(() => {
     const timer = setTimeout(() => {
-      updateTask(task.id, { title, priority, status, scheduledDate: scheduledDate || null, dueDate: dueDate || null, notes, tags: selectedTags })
+      // today/doing으로 상태 변경 시 scheduledDate 없으면 오늘로 설정
+      let effectiveDate = scheduledDate || null
+      if ((status === 'today' || status === 'doing') && !effectiveDate) {
+        effectiveDate = dayjs().format('YYYY-MM-DD')
+        setScheduledDate(effectiveDate)
+      }
+      updateTask(task.id, { title, priority, status, scheduledDate: effectiveDate, dueDate: dueDate || null, notes, tags: selectedTags })
     }, 600)
     return () => clearTimeout(timer)
   }, [title, priority, status, scheduledDate, dueDate, notes, selectedTags])

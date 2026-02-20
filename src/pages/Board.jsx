@@ -1,6 +1,7 @@
 import { useTodoStore } from '../store/todoStore'
 import { useTagStore } from '../store/tagStore'
 import { useEffect } from 'react'
+import dayjs from 'dayjs'
 import Layout from '../components/Layout'
 import './Board.css'
 
@@ -26,7 +27,15 @@ function Board() {
   const getTag = (id) => tags.find((t) => t.id === id)
 
   const moveStatus = async (taskId, newStatus) => {
-    await updateTask(taskId, { status: newStatus })
+    const updates = { status: newStatus }
+    // today/doing로 이동 시 scheduledDate가 없으면 오늘 날짜로 설정
+    if (newStatus === 'today' || newStatus === 'doing') {
+      const task = tasks.find((t) => t.id === taskId)
+      if (!task?.scheduledDate) {
+        updates.scheduledDate = dayjs().format('YYYY-MM-DD')
+      }
+    }
+    await updateTask(taskId, updates)
   }
 
   if (loading) return <Layout><p className="board-loading">불러오는 중...</p></Layout>
