@@ -1,3 +1,4 @@
+/* ── 헤더 ── */
 .today-header {
   background: #4f46e5;
   color: white;
@@ -18,43 +19,207 @@
   margin-top: 2px;
 }
 
-.today-loading,
-.today-empty {
+.today-loading {
   text-align: center;
   color: #9ca3af;
   padding: 48px 16px;
   font-size: 0.95rem;
 }
 
-.today-section {
-  margin-top: 0;
+/* ── Kanban 레이아웃 ── */
+.today-kanban {
+  display: flex;
+  gap: 0;
+  flex-direction: column; /* 모바일: 세로 */
+  padding: 0;
 }
 
-.doing-section {
-  background: #fffbeb;
-  border-bottom: 2px solid #fde68a;
+/* ── 컬럼 ── */
+.today-column {
+  background: white;
+  border-bottom: 6px solid #f0f2f5;
+  display: flex;
+  flex-direction: column;
 }
 
-.section-title {
-  font-size: 0.8rem;
+.today-col-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px 10px;
+  border-left: 4px solid;
+  background: white;
+  position: sticky;
+  top: 98px; /* header + quickadd 높이 */
+  z-index: 5;
+}
+
+.today-col-icon {
+  font-size: 1rem;
+}
+
+.today-col-title {
+  font-size: 0.88rem;
   font-weight: 700;
-  color: #6b7280;
-  padding: 10px 16px 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  flex: 1;
 }
 
-.done-title {
+.today-col-count {
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+.today-col-body {
+  padding: 4px 0 8px;
+}
+
+.today-col-empty {
+  text-align: center;
+  color: #d1d5db;
+  font-size: 0.85rem;
+  padding: 16px;
+}
+
+.today-card-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── 카드 ── */
+.today-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: background 0.1s;
+  background: white;
+}
+
+.today-card:hover {
+  background: #fafafa;
+}
+
+.today-card.done .today-card-title {
+  text-decoration: line-through;
   color: #9ca3af;
 }
 
-.task-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.today-card-handle {
+  color: #d1d5db;
+  font-size: 1rem;
+  cursor: grab;
+  flex-shrink: 0;
+  touch-action: none;
+  padding-top: 2px;
 }
 
-/* ── PC 최적화 ── */
+.today-card-handle:active {
+  cursor: grabbing;
+}
+
+.today-card-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.today-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.today-card-priority {
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.today-card-title {
+  font-size: 0.95rem;
+  color: #111827;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.today-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.today-card-tag {
+  font-size: 0.72rem;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* ── 카드 액션 버튼 ── */
+.today-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.col-move-btn {
+  font-size: 0.72rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid;
+  background: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.col-move-btn.doing {
+  color: #f59e0b;
+  border-color: #fde68a;
+}
+.col-move-btn.doing:hover {
+  background: #fef3c7;
+}
+
+.col-move-btn.done {
+  color: #22c55e;
+  border-color: #bbf7d0;
+}
+.col-move-btn.done:hover {
+  background: #f0fdf4;
+}
+
+.col-move-btn.todo {
+  color: #6b7280;
+  border-color: #e5e7eb;
+}
+.col-move-btn.todo:hover {
+  background: #f9fafb;
+}
+
+.col-move-btn.postpone {
+  color: #8b5cf6;
+  border-color: #ddd6fe;
+}
+.col-move-btn.postpone:hover {
+  background: #f5f3ff;
+}
+
+/* ── PC: 가로 3컬럼 ── */
 @media (min-width: 768px) {
   .today-header {
     padding: 20px 32px 18px;
@@ -64,17 +229,40 @@
     font-size: 1.5rem;
   }
 
-  .today-section {
-    max-width: 760px;
+  .today-kanban {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    height: calc(100vh - 124px); /* header + quickadd */
+    overflow: hidden;
   }
 
-  .section-title {
-    padding: 14px 32px 6px;
-    font-size: 0.82rem;
+  .today-column {
+    flex: 1;
+    border-bottom: none;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
-  .today-loading,
-  .today-empty {
-    padding: 80px 32px;
+  .today-col-header {
+    position: static; /* PC에서는 sticky 해제, 컬럼 자체가 스크롤 */
+    border-left: none;
+    border-top: 4px solid;
+    border-radius: 12px 12px 0 0;
+    padding: 14px 16px 12px;
+  }
+
+  .today-col-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 0 12px;
+  }
+
+  .today-card {
+    padding: 12px 16px;
   }
 }
