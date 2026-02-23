@@ -120,3 +120,18 @@
   border-color: #f59e0b;
   color: white;
 }
+
+/* ── PC 최적화 ── */
+@media (min-width: 768px) {
+  .task-card {
+    padding: 14px 32px;
+  }
+
+  .task-card:hover {
+    background: #f9fafb;
+  }
+
+  .task-title {
+    font-size: 1rem;
+  }
+}

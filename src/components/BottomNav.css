@@ -12,6 +12,13 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* PC에서 BottomNav 숨김 */
+@media (min-width: 768px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
 .nav-item {
   flex: 1;
   display: flex;

@@ -53,3 +53,28 @@
   padding: 0;
   margin: 0;
 }
+
+/* ── PC 최적화 ── */
+@media (min-width: 768px) {
+  .today-header {
+    padding: 20px 32px 18px;
+  }
+
+  .today-title {
+    font-size: 1.5rem;
+  }
+
+  .today-section {
+    max-width: 760px;
+  }
+
+  .section-title {
+    padding: 14px 32px 6px;
+    font-size: 0.82rem;
+  }
+
+  .today-loading,
+  .today-empty {
+    padding: 80px 32px;
+  }
+}

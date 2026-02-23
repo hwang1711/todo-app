@@ -41,6 +41,29 @@
   transition: background 0.15s;
 }
 
+.quick-add-btn:hover {
+  background: #4338ca;
+}
+
 .quick-add-btn:disabled {
   background: #c7d2fe;
+}
+
+/* ── PC 최적화 ── */
+@media (min-width: 768px) {
+  .quick-add-form {
+    padding: 12px 32px;
+    top: 60px;
+    max-width: 760px;
+  }
+
+  .quick-add-input {
+    font-size: 1rem;
+    padding: 11px 14px;
+  }
+
+  .quick-add-btn {
+    width: 44px;
+    height: 44px;
+  }
 }
