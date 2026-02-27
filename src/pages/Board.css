@@ -4,8 +4,9 @@
   padding: 16px 20px;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 11;
 }
+
 
 .board-header h1 {
   font-size: 1.2rem;
@@ -79,6 +80,20 @@
   font-size: 0.9rem;
   color: #111827;
   line-height: 1.4;
+}
+
+.board-col-desc {
+  display: block;
+  font-size: 0.72rem;
+  color: #9ca3af;
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+.board-card-date {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  font-weight: 500;
 }
 
 .board-card-tags {

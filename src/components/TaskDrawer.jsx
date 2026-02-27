@@ -26,6 +26,8 @@ function TaskDrawer({ task, onClose }) {
   const [priority, setPriority] = useState(task.priority ?? null)
   const [status, setStatus] = useState(task.status)
   const [scheduledDate, setScheduledDate] = useState(task.scheduledDate ?? '')
+  const [startDate, setStartDate] = useState(task.startDate ?? '')
+  const [doneAt, setDoneAt] = useState(task.doneAt ? dayjs(task.doneAt).format('YYYY-MM-DD') : '')
   const [dueDate, setDueDate] = useState(task.dueDate ?? '')
   const [notes, setNotes] = useState(task.notes ?? '')
   const [selectedTags, setSelectedTags] = useState(task.tags ?? [])
@@ -33,16 +35,48 @@ function TaskDrawer({ task, onClose }) {
   // 자동저장 (600ms debounce)
   useEffect(() => {
     const timer = setTimeout(() => {
-      // today/doing으로 상태 변경 시 scheduledDate 없으면 오늘로 설정
       let effectiveDate = scheduledDate || null
-      if ((status === 'today' || status === 'doing') && !effectiveDate) {
+      let effectiveStatus = status
+
+      // today/doing으로 상태 변경 시 scheduledDate 없으면 오늘로 설정
+      if ((effectiveStatus === 'today' || effectiveStatus === 'doing') && !effectiveDate) {
         effectiveDate = dayjs().format('YYYY-MM-DD')
         setScheduledDate(effectiveDate)
       }
-      updateTask(task.id, { title, priority, status, scheduledDate: effectiveDate, dueDate: dueDate || null, notes, tags: selectedTags })
+
+      const todayStr = dayjs().format('YYYY-MM-DD')
+      // doing 상태에서 예정일을 오늘 이후로 변경 시 → today로 자동 전환 (진행 일시중단)
+      if (effectiveStatus === 'doing' && effectiveDate && effectiveDate > todayStr) {
+        effectiveStatus = 'today'
+        setStatus('today')
+      }
+      // backlog 상태에서 예정일을 오늘 또는 과거로 변경 시 → today로 자동 승격
+      if (effectiveStatus === 'backlog' && effectiveDate && effectiveDate <= todayStr) {
+        effectiveStatus = 'today'
+        setStatus('today')
+      }
+
+      // doing으로 전환 시 시작일 자동 설정 (미설정인 경우에만)
+      let effectiveStartDate = startDate || null
+      if (effectiveStatus === 'doing' && !effectiveStartDate) {
+        effectiveStartDate = todayStr
+        setStartDate(effectiveStartDate)
+      }
+
+      // done으로 전환 시 완료일 자동 설정, 다른 상태로 전환 시 완료일 초기화
+      let effectiveDoneAt = doneAt ? dayjs(doneAt).endOf('day').valueOf() : null
+      if (effectiveStatus === 'done' && !effectiveDoneAt) {
+        effectiveDoneAt = Date.now()
+        setDoneAt(dayjs().format('YYYY-MM-DD'))
+      } else if (effectiveStatus !== 'done') {
+        effectiveDoneAt = null
+        setDoneAt('')
+      }
+
+      updateTask(task.id, { title, priority, status: effectiveStatus, scheduledDate: effectiveDate, startDate: effectiveStartDate, doneAt: effectiveDoneAt, dueDate: dueDate || null, notes, tags: selectedTags })
     }, 600)
     return () => clearTimeout(timer)
-  }, [title, priority, status, scheduledDate, dueDate, notes, selectedTags])
+  }, [title, priority, status, scheduledDate, startDate, doneAt, dueDate, notes, selectedTags])
 
   const toggleTag = (id) => {
     setSelectedTags((prev) =>
@@ -103,14 +137,24 @@ function TaskDrawer({ task, onClose }) {
             </div>
           </div>
 
-          {/* 날짜 */}
-          <div className="drawer-field">
-            <label>예정일</label>
-            <input type="date" className="drawer-date" value={scheduledDate} onChange={(e) => setScheduledDate(e.target.value)} />
-          </div>
-          <div className="drawer-field">
-            <label>마감일</label>
-            <input type="date" className="drawer-date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+          {/* 날짜 2열 그리드 */}
+          <div className="drawer-date-grid">
+            <div className="drawer-field">
+              <label>예정일</label>
+              <input type="date" className="drawer-date" value={scheduledDate} onChange={(e) => setScheduledDate(e.target.value)} />
+            </div>
+            <div className="drawer-field">
+              <label>마감일 (선택)</label>
+              <input type="date" className="drawer-date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+            </div>
+            <div className="drawer-field">
+              <label>시작일</label>
+              <input type="date" className="drawer-date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            </div>
+            <div className="drawer-field">
+              <label>종료일</label>
+              <input type="date" className="drawer-date" value={doneAt} onChange={(e) => setDoneAt(e.target.value)} />
+            </div>
           </div>
 
           {/* 태그 */}

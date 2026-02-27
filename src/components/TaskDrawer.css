@@ -87,7 +87,15 @@
   color: white;
 }
 
+.drawer-date-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
 .drawer-date {
+  width: 100%;
+  box-sizing: border-box;
   padding: 8px 10px;
   border: 1.5px solid #e5e7eb;
   border-radius: 8px;
@@ -98,6 +106,16 @@
 
 .drawer-date:focus {
   border-color: #4f46e5;
+}
+
+.drawer-date-readonly {
+  display: block;
+  padding: 8px 10px;
+  border: 1.5px solid #f3f4f6;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  background: #f9fafb;
 }
 
 .tag-row {

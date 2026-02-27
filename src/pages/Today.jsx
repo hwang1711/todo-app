@@ -18,7 +18,6 @@ import { useTodoStore } from '../store/todoStore'
 import { useTagStore } from '../store/tagStore'
 import Layout from '../components/Layout'
 import QuickAdd from '../components/QuickAdd'
-import TaskCard from '../components/TaskCard'
 import './Today.css'
 
 dayjs.locale('ko')
@@ -40,9 +39,9 @@ function Today() {
 
   const today = dayjs().format('YYYY-MM-DD')
 
-  // 할일: 오늘 날짜 + today 상태
+  // 할일: 오늘 날짜 + today 상태, 또는 오늘 날짜 + backlog 상태 (예정일 도달 자동 승격)
   const todoTasks = useMemo(
-    () => tasks.filter((t) => t.scheduledDate === today && t.status === 'today'),
+    () => tasks.filter((t) => t.scheduledDate === today && (t.status === 'today' || t.status === 'backlog')),
     [tasks, today]
   )
   // 진행중: doing 상태 전체
@@ -81,6 +80,7 @@ function Today() {
     if (!task.scheduledDate) updates.scheduledDate = today
     if (newStatus === 'done') updates.doneAt = Date.now()
     if (newStatus === 'today' || newStatus === 'doing') updates.doneAt = null
+    if (newStatus === 'doing' && !task.startDate) updates.startDate = today
     await updateTask(taskId, updates)
   }
 
@@ -247,6 +247,8 @@ function TodayCard({ task, col, onMove }) {
             {col === 'doing' && (
               <>
                 <button className="col-move-btn todo" onClick={() => onMove(task.id, 'today')}>↩ 할일</button>
+                <button className="col-move-btn postpone" onClick={() => postpone(task.id, 'tomorrow')}>내일</button>
+                <button className="col-move-btn postpone" onClick={() => postpone(task.id, 'nextweek')}>다음주</button>
                 <button className="col-move-btn done" onClick={() => onMove(task.id, 'done')}>✓ 완료</button>
               </>
             )}

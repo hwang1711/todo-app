@@ -1,3 +1,6 @@
+# Firebase Admin SDK key (보안 - 절대 커밋 금지)
+serviceAccountKey.json
+
 # Environment variables
 .env
 .env.local

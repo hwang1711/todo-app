@@ -2,10 +2,9 @@ import { NavLink } from 'react-router-dom'
 import './Sidebar.css'
 
 const NAV_ITEMS = [
-  { to: '/',        label: 'Today',   icon: '☀️' },
-  { to: '/weekly',  label: 'Weekly',  icon: '📅' },
-  { to: '/board',   label: 'Board',   icon: '📋' },
-  { to: '/backlog', label: 'Backlog', icon: '📦' },
+  { to: '/',       label: 'Today',  icon: '☀️' },
+  { to: '/weekly', label: 'Weekly', icon: '📅' },
+  { to: '/board',  label: 'Board',  icon: '📋' },
 ]
 
 function Sidebar() {

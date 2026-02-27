@@ -29,7 +29,7 @@ function parseQuickInput(raw) {
   return { title: title.trim(), scheduledDate, priority, tagNames }
 }
 
-function QuickAdd({ defaultDate }) {
+function QuickAdd({ defaultDate, defaultStatus = 'today' }) {
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
   const { addTask } = useTodoStore()
@@ -56,8 +56,8 @@ function QuickAdd({ defaultDate }) {
 
     await addTask({
       title,
-      status: 'today',
-      scheduledDate: defaultDate ?? scheduledDate,
+      status: defaultStatus,
+      scheduledDate: defaultStatus === 'backlog' ? null : (defaultDate ?? scheduledDate),
       priority,
       tags: tagIds,
     })
